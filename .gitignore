@@ -1,0 +1,9 @@
+.vs/
+bin/
+obj/
+node_modules/bin/
+obj/
+.vs/
+.local-chromium/
+.cache/
+node_modules/
