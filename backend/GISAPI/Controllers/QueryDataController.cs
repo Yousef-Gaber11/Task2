@@ -19,13 +19,21 @@ namespace GISAPI.Controllers
             var browserFetcher = new BrowserFetcher();
             await browserFetcher.DownloadAsync();
 
-            using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
+            using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+            {
+                Headless = true,
+                //Args = new[]
+                //{
+                //      "--disable-web-security",
+                //      "--allow-file-access-from-files"
+                //}
+            });
             using var page = await browser.NewPageAsync();
 
             await page.SetViewportAsync(new ViewPortOptions { Width = 1000, Height = 700 });
 
-            string frontendHtmlPath = @"D:\Github_Repos\Task2\frontend\index.html";
-            string fileUrl = $"file:///{frontendHtmlPath.Replace("\\", "/")}?x={x}&y={y}";
+            string uiPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ui", "index.html"); ;
+            string fileUrl = $"file:///{uiPath.Replace("\\", "/")}?x={x}&y={y}";
 
             var tcs = new TaskCompletionSource<bool>();
             page.Console += (sender, e) =>
@@ -41,7 +49,8 @@ namespace GISAPI.Controllers
             string baseUrl = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
             string finalImageUrl = $"{baseUrl}/images/{fileName}";
 
-            return Ok(new
+
+            var responseData = new
             {
                 status = true,
                 errorCode = 0,
@@ -49,7 +58,17 @@ namespace GISAPI.Controllers
                 gis_code = "Done",
                 imageUrl = finalImageUrl,
                 urlEsri = "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer"
-            });
+            };
+
+            string jsonFileName = $"snapshot_{x}_{y}.json";
+            string jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", jsonFileName);
+
+            var jsonOptions = new System.Text.Json.JsonSerializerOptions { WriteIndented = true };
+            string jsonString = System.Text.Json.JsonSerializer.Serialize(responseData, jsonOptions);
+
+            await System.IO.File.WriteAllTextAsync(jsonFilePath, jsonString);
+
+            return Ok(responseData);
         }
     }
 }

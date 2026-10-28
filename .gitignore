@@ -7,3 +7,6 @@ obj/
 .local-chromium/
 .cache/
 node_modules/
+# Ignore generated images and json responses
+backend/GISAPI/wwwroot/images/*.jpg
+backend/GISAPI/wwwroot/images/*.json

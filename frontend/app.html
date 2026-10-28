@@ -1,0 +1,45 @@
+<!doctype html>
+<html dir="rtl" lang="ar">
+  <head>
+    <meta charset="utf-8" />
+    <title>اسكرين للنقطة المحدده</title>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.28/esri/themes/light/main.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://js.arcgis.com/4.28/"></script>
+  </head>
+  <body>
+    <div id="sidebar">
+      <h2>تحديد النقطة</h2>
+      <div class="input-group">
+        <label> X : </label>
+        <input type="number" id="xInput" step="any" placeholder="46.6697" />
+      </div>
+      <div class="input-group">
+        <label> Y : </label>
+        <input type="number" id="yInput" step="any" placeholder="24.7115" />
+      </div>
+
+      <div class="buttons">
+        <button id="btnLocate" class="btn-primary">حدد النقطة</button>
+      </div>
+
+      <div class="buttons-row">
+        <button id="btnCapture" class="btn-success">التقط صورة</button>
+        <button id="btnClear" class="btn-danger">إزالة</button>
+      </div>
+
+      <div id="statusAlert" class="status-alert hidden"></div>
+
+      <div id="resultBox" class="result-box hidden">
+        <a id="imageLink" href="#" target="_blank">فتح الصورة</a>
+      </div>
+    </div>
+
+    <div id="viewDiv"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
